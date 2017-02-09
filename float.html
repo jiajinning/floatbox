@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .floatBox{
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            border: 1px solid;
+            background: #ffffff;
+        }
+        .float-content{
+            height: 100%;
+        }
+        /*关闭按钮*/
+        .floats-close{
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: #000;
+            color: #fff;
+        }
+    </style>
+    <script src="http://libs.baidu.com/jquery/2.0.3/jquery.js"></script>
+    <script>
+        $.fn.floats = function(options){
+            var opt = $.extend({},options);
+
+            var $this = this;
+            //获取文档的大小
+            var docWidth = $(document).width();
+            var docHeight = $(document).height();
+
+            //浮动盒子的大小
+            var boxWidth = $this.width();
+            var boxHeight = $this.height();
+
+
+            //生成一个随机数
+            function randomNumWdith(){
+                return parseInt(Math.random()*(docWidth - boxWidth));
+            }
+            function randomNumHeight(){
+                return parseInt(Math.random()*(docHeight - boxHeight));
+            }
+            //随机设置位置
+            $this.css({'left':randomNumWdith(),'top':randomNumHeight()});
+            //移动盒子
+            function moveBox(){
+                $this.animate({'left':randomNumWdith(),'top':randomNumHeight()},10000)
+            }
+            var setStop = setInterval(moveBox,1000);
+            //绑定事件
+            $this.click(function(){
+                $this.stop(true);
+                clearInterval(setStop);
+            });
+            //关闭按钮
+            var element = $('<span class="floats-close"></span>')
+                    .html("X")
+                    .click(function(){
+                        $this.hide();
+                    });
+            $this.append(element);
+            return this
+        }
+    </script>
+</head>
+<body>
+<div class="floatBox">
+    <div class="float-content"></div>
+</div>
+<script>
+    $(function(){
+        $(".floatBox").floats()
+    })
+</script>
+</body>
+</html>
